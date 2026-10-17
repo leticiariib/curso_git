@@ -239,6 +239,55 @@ Mostra todos os commits com autor, data e mensagem. Cada commit tem um ID (uma s
 
 ---
 
+## 11. Estrutura interna: DAG, ponteiros e notação de ancestralidade
+
+Para entender como comandos avançados e movimentações no Git funcionam, é preciso compreender como ele organiza as informações internamente.
+
+### 11.1 O DAG (Grafo Acíclico Dirigido)
+
+Por baixo dos panos, o histórico do Git não é uma simples lista, mas sim uma estrutura matemática chamada **DAG** (*Directed Acyclic Graph* ou Grafo Acíclico Dirigido):
+
+* **Direcionado:** Cada commit sabe quem é o seu commit "pai" (*parent*), apontando sempre para trás na linha do tempo.
+* **Acíclico:** O fluxo de histórico avança sem formar loops ou ciclos infinitos.
+
+```text
+[ Commit Inicial (Root) ] <─── [ Commit 2 ] <─── [ Commit 3 (HEAD) ]
+```
+
+> **O caso especial do Commit Inicial (Root Commit):**
+> O primeiro commit de um repositório é o único que **não possui um commit pai**. Por esse motivo, tentar usar comandos de navegação para trás (como `git reset HEAD~1`) no primeiro commit resultará em erro fatal, pois não existe um ancestral prévio para o Git consultar. Para desfazê-lo mantendo os arquivos no stage, utiliza-se `git update-ref -d HEAD`.
+
+---
+
+### 11.2 Os Ponteiros: HEAD e Branches
+
+No Git, branches e seleções não são cópias inteiras de pastas, mas sim **ponteiros** (arquivos de texto leves que guardam o ID/hash de um commit):
+
+1. **Branch (ex: `main`):** Um ponteiro móvel que aponta para o commit mais recente daquela linha de trabalho.
+2. **`HEAD`:** O ponteiro principal do seu ambiente. Ele indica **onde você está trabalhando no momento**. Geralmente, o `HEAD` aponta para a branch atual, que por sua vez aponta para o commit.
+
+```text
+HEAD ──> main ──> [ Commit 3 (9f2a1b) ]
+```
+![Texto alternativo da imagem](URL_ou_caminho_da_imagem)
+
+---
+
+### 11.3 Navegando com o Til (`~`)
+
+A notação de til (`~`) é usada para referenciar commits anteriores em relação a uma referência (como o `HEAD` ou uma branch):
+
+* **`HEAD`**: O commit atual.
+* **`HEAD~1`**: O commit pai (1 passo atrás no histórico).
+* **`HEAD~2`**: O "avô" do commit atual (2 passos atrás).
+
+| Exemplo | Significado |
+| :--- | :--- |
+| `git reset HEAD~1` | Move o ponteiro da branch atual 1 commit para trás no DAG. |
+| `git checkout HEAD~2` | Move o `HEAD` diretamente para 2 commits atrás. |
+
+---
+
 ## 11. Branches e merge
 
 Uma **branch** (ramo) é uma linha separada de desenvolvimento, onde você trabalha de forma independente. A branch padrão se chama `main` e é a linha central do projeto.
