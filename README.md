@@ -269,7 +269,7 @@ No Git, branches e seleções não são cópias inteiras de pastas, mas sim **po
 ```text
 HEAD ──> main ──> [ Commit 3 (9f2a1b) ]
 ```
-![Texto alternativo da imagem](URL_ou_caminho_da_imagem)
+![Texto alternativo da imagem](imagem_2026-10-17_115350475.png)
 
 ---
 
