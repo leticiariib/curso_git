@@ -113,6 +113,28 @@ git init
 
 O Git responde `Initialized empty Git repository`. Com `ls -la` você vê a pasta oculta `.git`: é o coração do projeto, onde o Git guarda tudo (mudanças, autores, versões anteriores). Quem a cria é o próprio Git.
 
+---
+
+### 5.1.1 Conectando o repositório local ao GitHub
+
+Após criar o repositório localmente com `git init`, você precisará de uma conta no [GitHub](https://github.com) para salvar seu projeto na nuvem.
+
+#### Passo a passo para publicação:
+
+1. **Crie o repositório na nuvem:**
+   - Acesse o GitHub, clique no botão **New** (ou no ícone de `+`).
+   - Dê o nome para o repositório (ex.: `git-1`).
+   - Mantenha **desmarcadas** as opções de criar README, `.gitignore` ou licença (pois você já iniciou o projeto na sua máquina).
+   - Clique em **Create repository**.
+
+2. **Subindo:**
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin [https://github.com/seu-usuario/git-1.git](https://github.com/seu-usuario/git-1.git)
+   git push -u origin main
+
 ### 5.2 Criar no GitHub e clonar: `git clone`
 
 1. Em [github.com](https://github.com), clique em **New**, dê um nome (ex.: `git-CursoPet`), escreva uma descrição, escolha **Public** e clique em **Create repository**.
