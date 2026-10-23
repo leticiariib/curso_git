@@ -11,15 +11,16 @@
 8. [Salvando mudanças (commit)](#8-salvando-mudanças-git-commit)
 9. [Removendo arquivos (rm)](#9-removendo-arquivos-git-rm)
 10. [Histórico (log)](#10-histórico-git-log)
-11. [Branches e merge](#11-branches-e-merge)
-12. [Viajando entre commits e comparando (checkout e diff)](#12-viajando-entre-commits-e-comparando)
-13. [Enviando e recebendo (push, fetch, pull)](#13-enviando-e-recebendo-push-fetch-pull)
-14. [Descartando mudanças (restore)](#14-descartando-mudanças-git-restore)
-15. [Guardando trabalho inacabado (stash)](#15-guardando-trabalho-inacabado-git-stash)
-16. [Desfazendo commits com segurança (revert)](#16-desfazendo-commits-com-segurança-git-revert)
-17. [Histórico limpo (rebase)](#17-histórico-limpo-git-rebase)
-18. [Pull requests no GitHub](#18-pull-requests-no-github)
-19. [Cheat sheet de comandos](#19-cheat-sheet-de-comandos)
+11. [Estrutura interna: DAG, ponteiros e notação de ancestralidade](#11-estrutura-interna-dag-ponteiros-e-notação-de-ancestralidade)
+12. [Branches e merge](#12-branches-e-merge)
+13. [Viajando entre commits e comparando (checkout e diff)](#13-viajando-entre-commits-e-comparando-checkout-e-diff)
+14. [Enviando e recebendo (push, fetch, pull)](#14-enviando-e-recebendo-push-fetch-pull)
+15. [Descartando mudanças (restore)](#15-descartando-mudanças-git-restore)
+16. [Guardando trabalho inacabado (stash)](#16-guardando-trabalho-inacabado-git-stash)
+17. [Desfazendo commits com segurança (revert)](#17-desfazendo-commits-com-segurança-git-revert)
+18. [Histórico limpo (rebase)](#18-histórico-limpo-git-rebase)
+19. [Pull requests no GitHub](#19-pull-requests-no-github)
+20. [Cheat sheet de comandos](#20-cheat-sheet-de-comandos)
 
 ---
 ## 1. O que é Git e controle de versão
@@ -96,7 +97,7 @@ A opção `--global` vale para o computador inteiro. Use `--local` para valer ap
 
 ---
 
-## 5. Criando repositórios: init e clone
+## 5. Criando repositórios (init e clone)
 
 Há duas maneiras de ter um repositório Git. Em ambas, o resultado é uma pasta oculta `.git`.
 
@@ -132,8 +133,9 @@ Após criar o repositório localmente com `git init`, você precisará de uma co
    git add .
    git commit -m "Initial commit"
    git branch -M main
-   git remote add origin [https://github.com/seu-usuario/git-1.git](https://github.com/seu-usuario/git-1.git)
+   git remote add origin https://github.com/seu-usuario/git-1.git
    git push -u origin main
+   ```
 
 ### 5.2 Criar no GitHub e clonar: `git clone`
 
@@ -150,7 +152,7 @@ O repositório vem da nuvem para o seu computador, com todos os arquivos e a pas
 
 ---
 
-## 6. Acompanhando mudanças: `git status`
+## 6. Acompanhando mudanças (git status)
 
 Mostra o que mudou na *working directory*: arquivos modificados, novos (*untracked*), deletados e o que já está na *staging area*.
 
@@ -162,7 +164,7 @@ git status
 
 ---
 
-## 7. Preparando mudanças: `git add`
+## 7. Preparando mudanças (git add)
 
 Mover mudanças da *working directory* para a *staging area* se chama *adding*. É dizer ao Git: *"quero manter esta mudança"*.
 
@@ -188,7 +190,7 @@ git reset
 
 ---
 
-## 8. Salvando mudanças: `git commit`
+## 8. Salvando mudanças (git commit)
 
 O commit salva de forma permanente o que está na *staging area* no repositório local, como uma versão registrada do histórico.
 
@@ -215,7 +217,7 @@ Desfaz o último commit e devolve as mudanças à *working directory*, prontas p
 
 ---
 
-## 9. Removendo arquivos: `git rm`
+## 9. Removendo arquivos (git rm)
 
 Apagar um arquivo manualmente e depois dar `git add` são dois passos. O `git rm` faz os dois de uma vez: deleta o arquivo e já coloca a remoção na *staging area*.
 
@@ -228,7 +230,7 @@ Apagar um arquivo manualmente e depois dar `git add` são dois passos. O `git rm
 
 ---
 
-## 10. Histórico: `git log`
+## 10. Histórico (git log)
 
 ```bash
 git log
@@ -247,8 +249,8 @@ Para entender como comandos avançados e movimentações no Git funcionam, é pr
 
 Por baixo dos panos, o histórico do Git não é uma simples lista, mas sim uma estrutura matemática chamada **DAG** (*Directed Acyclic Graph* ou Grafo Acíclico Dirigido):
 
-* **Direcionado:** Cada commit sabe quem é o seu commit "pai" (*parent*), apontando sempre para trás na linha do tempo.
-* **Acíclico:** O fluxo de histórico avança sem formar loops ou ciclos infinitos.
+- **Direcionado:** Cada commit sabe quem é o seu commit "pai" (*parent*), apontando sempre para trás na linha do tempo.
+- **Acíclico:** O fluxo de histórico avança sem formar loops ou ciclos infinitos.
 
 ```text
 [ Commit Inicial (Root) ] <─── [ Commit 2 ] <─── [ Commit 3 (HEAD) ]
@@ -277,9 +279,9 @@ HEAD ──> main ──> [ Commit 3 (9f2a1b) ]
 
 A notação de til (`~`) é usada para referenciar commits anteriores em relação a uma referência (como o `HEAD` ou uma branch):
 
-* **`HEAD`**: O commit atual.
-* **`HEAD~1`**: O commit pai (1 passo atrás no histórico).
-* **`HEAD~2`**: O "avô" do commit atual (2 passos atrás).
+- **`HEAD`**: O commit atual.
+- **`HEAD~1`**: O commit pai (1 passo atrás no histórico).
+- **`HEAD~2`**: O "avô" do commit atual (2 passos atrás).
 
 | Exemplo | Significado |
 | :--- | :--- |
@@ -288,7 +290,7 @@ A notação de til (`~`) é usada para referenciar commits anteriores em relaç�
 
 ---
 
-## 11. Branches e merge
+## 12. Branches e merge
 
 Uma **branch** (ramo) é uma linha separada de desenvolvimento, onde você trabalha de forma independente. A branch padrão se chama `main` e é a linha central do projeto.
 
@@ -309,7 +311,7 @@ Um conflito acontece quando o mesmo trecho do mesmo arquivo foi alterado de form
 
 ---
 
-## 12. Viajando entre commits e comparando
+## 13. Viajando entre commits e comparando (checkout e diff)
 
 ### Voltar a um commit anterior
 
@@ -334,7 +336,7 @@ Mostra o que foi removido (em vermelho) e adicionado (em verde).
 
 ---
 
-## 13. Enviando e recebendo: push, fetch, pull
+## 14. Enviando e recebendo (push, fetch, pull)
 
 | Comando | O que faz |
 | :--- | :--- |
@@ -344,11 +346,11 @@ Mostra o que foi removido (em vermelho) e adicionado (em verde).
 
 Cada branch precisa ser enviada separadamente. Por exemplo, `git push origin staging` cria a branch `staging` no remoto e envia seus commits.
 
-* *push, fetch e pull são os comandos mais frequentes no trabalho diário.*
+- *push, fetch e pull são os comandos mais frequentes no trabalho diário.*
 
 ---
 
-## 14. Descartando mudanças: `git restore`
+## 15. Descartando mudanças (git restore)
 
 Você começou uma funcionalidade, mexeu em 10 ou 15 arquivos e percebeu que a abordagem não funciona. Desfazer tudo à mão seria praticamente impossível. O `git restore` volta arquivos ou pastas ao estado do último commit.
 
@@ -364,7 +366,7 @@ Você começou uma funcionalidade, mexeu em 10 ou 15 arquivos e percebeu que a a
 
 ---
 
-## 15. Guardando trabalho inacabado: `git stash`
+## 16. Guardando trabalho inacabado (git stash)
 
 Você está no meio de uma funcionalidade grande, ainda não commitável, e precisa trocar de branch para revisar algo. O Git bloqueia a troca (*Your local changes would be overwritten by checkout*). Em vez de jogar o trabalho fora, use o **stash**, uma área temporária.
 
@@ -379,7 +381,7 @@ Você está no meio de uma funcionalidade grande, ainda não commitável, e prec
 
 ---
 
-## 16. Desfazendo commits com segurança: `git revert`
+## 17. Desfazendo commits com segurança (git revert)
 
 O `git revert` desfaz as mudanças de um commit antigo, mas sem apagá-lo: cria um novo commit que inverte aquelas mudanças. O histórico permanece limpo e rastreável. 
 
@@ -393,7 +395,7 @@ O `git revert` desfaz as mudanças de um commit antigo, mas sem apagá-lo: cria 
 
 ---
 
-## 17. Histórico limpo: `git rebase`
+## 18. Histórico limpo (git rebase)
 
 Você cria a branch `feature` a partir da `main` e trabalha nela. Enquanto isso, a `main` recebe atualizações e você quer incorporá-las. Duas opções:
 
@@ -411,7 +413,7 @@ Você cria a branch `feature` a partir da `main` e trabalha nela. Enquanto isso,
 
 ---
 
-## 18. Pull requests no GitHub
+## 19. Pull requests no GitHub
 
 Um **pull request (PR)** é um pedido para mesclar suas mudanças em outra branch, geralmente a `main`: *"fiz alterações na minha branch; revisem e, se estiver tudo bom, façam o merge"*. Você não altera diretamente o repositório de outras pessoas, então pede permissão assim.
 
@@ -428,7 +430,7 @@ Assim, toda mudança é revisada antes de entrar na `main`, que se mantém está
 
 ---
 
-## 19. Cheat sheet de comandos
+## 20. Cheat sheet de comandos
 
 | Comando | Para que serve |
 | :--- | :--- |
